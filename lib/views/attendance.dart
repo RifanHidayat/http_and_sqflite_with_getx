@@ -92,20 +92,20 @@ class AttendancePage extends StatelessWidget {
                           var startTime = format.parse("08:30");
                           var endTime = format.parse("17:30");
 
-                          // var currentStartTime = format.parse(data.clockIn);
-                          // var currentEndtime = format.parse(data.clockOut);
+                          var currentStartTime = format.parse(data.clockIn);
+                          var currentEndtime = format.parse(data.clockOut);
 
-                          // if (currentStartTime.isAfter(startTime)) {
-                          //   Duration diff =
-                          //       currentStartTime.difference(startTime);
-                          //   data.description!.add(
-                          //       "${data.name} telat ${diff.inMinutes} Menit");
-                          // }
-                          // if (currentEndtime.isBefore(endTime)) {
-                          //   Duration diff = endTime.difference(currentEndtime);
-                          //   data.description!.add(
-                          //       "${data.name} Pulang ${diff.inMinutes} Menit lebih awal");
-                          // }
+                          if (currentStartTime.isAfter(startTime)) {
+                            Duration diff =
+                                currentStartTime.difference(startTime);
+                            data.description!.add(
+                                "${data.name} telat ${diff.inMinutes} Menit");
+                          }
+                          if (currentEndtime.isBefore(endTime)) {
+                            Duration diff = endTime.difference(currentEndtime);
+                            data.description!.add(
+                                "${data.name} Pulang ${diff.inMinutes} Menit lebih awal");
+                          }
 
                           return Padding(
                               padding:
