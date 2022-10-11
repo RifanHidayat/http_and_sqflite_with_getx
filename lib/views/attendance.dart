@@ -31,6 +31,8 @@ class AttendancePage extends StatelessWidget {
 
   var endTime = TimeOfDay(hour: 17, minute: 30);
 
+  final _formKey = GlobalKey<FormState>();
+
   TimeOfDay time = TimeOfDay.now();
   @override
   Widget build(BuildContext context) {
@@ -90,20 +92,20 @@ class AttendancePage extends StatelessWidget {
                           var startTime = format.parse("08:30");
                           var endTime = format.parse("17:30");
 
-                          var currentStartTime = format.parse(data.clockIn);
-                          var currentEndtime = format.parse(data.clockOut);
+                          // var currentStartTime = format.parse(data.clockIn);
+                          // var currentEndtime = format.parse(data.clockOut);
 
-                          if (currentStartTime.isAfter(startTime)) {
-                            Duration diff =
-                                currentStartTime.difference(startTime);
-                            data.description!.add(
-                                "${data.name} telat ${diff.inMinutes} Menit");
-                          }
-                          if (currentEndtime.isBefore(endTime)) {
-                            Duration diff = endTime.difference(currentEndtime);
-                            data.description!.add(
-                                "${data.name} Pulang ${diff.inMinutes} Menit lebih awal");
-                          }
+                          // if (currentStartTime.isAfter(startTime)) {
+                          //   Duration diff =
+                          //       currentStartTime.difference(startTime);
+                          //   data.description!.add(
+                          //       "${data.name} telat ${diff.inMinutes} Menit");
+                          // }
+                          // if (currentEndtime.isBefore(endTime)) {
+                          //   Duration diff = endTime.difference(currentEndtime);
+                          //   data.description!.add(
+                          //       "${data.name} Pulang ${diff.inMinutes} Menit lebih awal");
+                          // }
 
                           return Padding(
                               padding:
@@ -128,6 +130,7 @@ class AttendancePage extends StatelessWidget {
                                       context: context, id: data.id.toString());
                                 },
                                 onTapDelete: () {
+                                  
                                   SweetAlertV2.show(context,
                                       title: "Deleted !",
                                       subtitle: "Are you sure?",
@@ -138,6 +141,7 @@ class AttendancePage extends StatelessWidget {
                                     if (isConfirm) {
                                       attendanceController
                                           .deleteAtt(data.id.toString());
+
                                       return false;
                                     } else {
                                       Get.back();
@@ -197,131 +201,146 @@ class AttendancePage extends StatelessWidget {
             children: [
               Divider(),
               Form(
-                  // key: _formKey,
+                  key: _formKey,
                   child: Column(
-                children: [
-                  TextFormApp(
-                    title: "NIK",
-                    controller: attendanceController.nikCtr,
-                  ),
-                  TextFormApp(
-                      title: "name", controller: attendanceController.nameCtr),
-                  InkWell(
-                    onTap: () {
-                      multipleDate(context);
-                    },
-                    child: TextFormApp(
-                      enabled: false,
-                      icon: Icon(
-                        Icons.date_range,
-                        color: ColorsApp.black.withOpacity(0.5),
-                      ),
-                      title: "Tanggal",
-                      controller: attendanceController.datectr,
-                    ),
-                  ),
-                  Row(
                     children: [
-                      Container(
-                        width: SizeApp.width / 2 - 40,
-                        child: InkWell(
-                          onTap: () async {
-                            var startTime = await showTimePicker(
-                              context: context,
-                              initialTime:
-                                  attendanceController.clockInCtr.text != ""
-                                      ? TimeOfDay(
-                                          hour: int.parse(attendanceController
-                                              .clockInCtr.text
-                                              .split(":")[0]),
-                                          minute: int.parse(attendanceController
-                                              .clockInCtr.text
-                                              .split(":")[1]))
-                                      : TimeOfDay.now(),
-                              initialEntryMode: TimePickerEntryMode.input,
-                            );
-                            if (startTime == null) return;
-
-                            time = startTime;
-
-                            attendanceController.clockInCtr.text =
-                                "${time.hour}:${time.minute}";
-                          },
-                          child: TextFormApp(
-                            enabled: false,
-                            title: "jam masuk ",
-                            controller: attendanceController.clockInCtr,
-                          ),
-                        ),
+                      TextFormApp(
+                        title: "NIK",
+                        controller: attendanceController.nikCtr,
                       ),
-                      Container(
-                        width: SizeApp.width / 2 - 40,
-                        child: InkWell(
-                          onTap: () async {
-                            var endTime = await showTimePicker(
-                              context: context,
-                              initialTime:
-                                  attendanceController.clockOutCtr.text != ""
-                                      ? TimeOfDay(
-                                          hour: int.parse(attendanceController
-                                              .clockOutCtr.text
-                                              .split(":")[0]),
-                                          minute: int.parse(attendanceController
-                                              .clockOutCtr.text
-                                              .split(":")[1]))
-                                      : TimeOfDay.now(),
-                              initialEntryMode: TimePickerEntryMode.input,
-                            );
-                            if (endTime == null) return;
-
-                            time = endTime;
-
-                            attendanceController.clockOutCtr.text =
-                                "${time.hour}:${time.minute}";
-                          },
-                          child: TextFormApp(
-                            enabled: false,
-                            title: "Jam Pulang",
-                            controller: attendanceController.clockOutCtr,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ButtonApp(
-                        title: "Cancel",
-                        color: Colors.grey[300],
+                      TextFormApp(
+                          title: "name",
+                          controller: attendanceController.nameCtr),
+                      InkWell(
                         onTap: () {
-                          Get.back();
+                          multipleDate(context);
                         },
+                        child: TextFormApp(
+                          enabled: false,
+                          icon: Icon(
+                            Icons.date_range,
+                            color: ColorsApp.black.withOpacity(0.5),
+                          ),
+                          title: "Tanggal",
+                          controller: attendanceController.datectr,
+                        ),
                       ),
-                      const SizedBox(
-                        width: 10,
+                      Row(
+                        children: [
+                          Container(
+                            width: SizeApp.width / 2 - 40,
+                            child: InkWell(
+                              onTap: () async {
+                                var startTime = await showTimePicker(
+                                  context: context,
+                                  initialTime:
+                                      attendanceController.clockInCtr.text != ""
+                                          ? TimeOfDay(
+                                              hour: int.parse(
+                                                  attendanceController
+                                                      .clockInCtr.text
+                                                      .split(":")[0]),
+                                              minute: int.parse(
+                                                  attendanceController
+                                                      .clockInCtr.text
+                                                      .split(":")[1]))
+                                          : TimeOfDay.now(),
+                                  initialEntryMode: TimePickerEntryMode.input,
+                                );
+                                if (startTime == null) return;
+
+                                time = startTime;
+
+                                attendanceController.clockInCtr.text =
+                                    "${time.hour}:${time.minute}";
+                              },
+                              child: TextFormApp(
+                                enabled: false,
+                                title: "jam masuk ",
+                                controller: attendanceController.clockInCtr,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: SizeApp.width / 2 - 40,
+                            child: InkWell(
+                              onTap: () async {
+                                var endTime = await showTimePicker(
+                                  context: context,
+                                  initialTime: attendanceController
+                                              .clockOutCtr.text !=
+                                          ""
+                                      ? TimeOfDay(
+                                          hour: int.parse(attendanceController
+                                              .clockOutCtr.text
+                                              .split(":")[0]),
+                                          minute: int.parse(attendanceController
+                                              .clockOutCtr.text
+                                              .split(":")[1]))
+                                      : TimeOfDay.now(),
+                                  initialEntryMode: TimePickerEntryMode.input,
+                                );
+                                if (endTime == null) return;
+
+                                time = endTime;
+
+                                attendanceController.clockOutCtr.text =
+                                    "${time.hour}:${time.minute}";
+                              },
+                              child: TextFormApp(
+                                enabled: false,
+                                title: "Jam Pulang",
+                                controller: attendanceController.clockOutCtr,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      Obx(() {
-                        return attendanceController.saveLoading.value == false
-                            ? ButtonApp(
-                                title: "Save",
-                                color: ColorsApp.baseColor,
-                                onTap: () {
-                                  if (id != "0") {
-                                    attendanceController.updateAtt(context, id);
-                                  } else {
-                                    attendanceController.saveAtt(context);
-                                  }
-                                },
-                              )
-                            : Container(
-                                child: CircularProgressIndicator(),
-                              );
-                      })
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ButtonApp(
+                            title: "Cancel",
+                            color: Colors.grey[300],
+                            onTap: () {
+                              Get.back();
+                            },
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Obx(() {
+                            return attendanceController.saveLoading.value ==
+                                    false
+                                ? ButtonApp(
+                                    title: "Save",
+                                    color: ColorsApp.baseColor,
+                                    onTap: () {
+                                      if (id != "0") {
+                                        if (_formKey.currentState!.validate()) {
+                                          // If the form is valid, display a snackbar. In the real world,
+                                          // you'd often call a server or save the information in a database.
+                                          attendanceController.updateAtt(
+                                              context, id);
+                                        }
+                                      } else {
+                                        if (_formKey.currentState!.validate()) {
+                                          // If the form is valid, display a snackbar. In the real world,
+                                          // you'd often call a server or save the information in a database.
+                                          attendanceController.saveAtt(context);
+                                        }
+                                        //
+                                      }
+                                    },
+                                  )
+                                : Container(
+                                    child: CircularProgressIndicator(),
+                                  );
+                          })
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ))
+                  ))
             ],
           );
         });

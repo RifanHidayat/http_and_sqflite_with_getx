@@ -17,14 +17,11 @@ class AttendanceController extends GetxController {
   var clockInCtr = TextEditingController();
   var clockOutCtr = TextEditingController();
 
-  
-
   void fetchAllAtt() {
     atts.value = [];
     print("dgs");
     isLoading.value = true;
     db.getAtt().then((value) {
-     
       atts.value = AttendanceModel.fromJsonToList(value);
 
       isLoading.value = false;
@@ -59,10 +56,11 @@ class AttendanceController extends GetxController {
 
   void deleteAtt(id) {
     db.deleteAtt(id).then((value) {
+      Get.back();
       Get.snackbar('Message', 'Successfully deleted',
           snackPosition: SnackPosition.BOTTOM);
     });
-    Get.back();
+
     fetchAllAtt();
   }
 

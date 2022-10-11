@@ -33,7 +33,6 @@ class TextFormApp extends StatelessWidget {
                 suffixIcon: icon,
                 hintText: '',
                 filled: true,
-                
                 fillColor: ColorsApp.white,
                 contentPadding:
                     const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
@@ -52,6 +51,12 @@ class TextFormApp extends StatelessWidget {
                       BorderSide(color: ColorsApp.black.withOpacity(0.5)),
                   borderRadius: BorderRadius.circular(10.0),
                 )),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           ),
         ],
       ),

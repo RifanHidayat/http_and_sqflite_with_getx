@@ -24,8 +24,11 @@ class ActivityController extends GetxController {
   var clockOutCtr = TextEditingController();
   var actiivity = TextEditingController();
   var remark = TextEditingController();
+  RxString activeNik = "11111111".obs;
 
+  RxString dropdownValue = "11111111".obs;
   fetchAllActivity() async {
+    print(activeNik.toString());
     isLoading.value = true;
     var body = jsonEncode({
       "UserID": "intranet",
@@ -34,7 +37,7 @@ class ActivityController extends GetxController {
           "Y2Q3MDFhODZiYWQwMDE0OGM1MTM1ZWM2MTA2YjEyMTYxNGNjZmE2ODVkODQyMzExM2UwNzk3ZWZhZTFhMzA5Mg==",
       "GroupCD": "adm",
       "RequestData": {
-        "NIK": "11111111",
+        "NIK": activeNik.toString(),
         "FromDate": "",
         "ToDate": "",
         "Status": "N"
@@ -47,11 +50,12 @@ class ActivityController extends GetxController {
     print("data ${resp['data']}");
 
     if (response.statusCode == 200) {
-      activities.value = ActivityModel.fromJsonToList(resp['data']);
+      activities.value = ActivityModel.fromJsonToList(resp['data'] ?? []);
       print("dasfs");
 
       isLoading.value = false;
     } else {
+      activities.value = [];
       isLoading.value = false;
     }
   }
@@ -96,7 +100,7 @@ class ActivityController extends GetxController {
           "Y2Q3MDFhODZiYWQwMDE0OGM1MTM1ZWM2MTA2YjEyMTYxNGNjZmE2ODVkODQyMzExM2UwNzk3ZWZhZTFhMzA5Mg==",
       "GroupCD": "adm",
       "RequestData": {
-        "NIK": nikCtr.text,
+        "NIK": dropdownValue.toString(),
         "KdDept": "04",
         "ActDate": dateCtr.text,
         "TimeIn": clockInCtr.text,

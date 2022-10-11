@@ -6,6 +6,7 @@ import 'package:test_pt_kb_insurance/assets/fonts.dart';
 import 'package:test_pt_kb_insurance/assets/images.dart';
 import 'package:test_pt_kb_insurance/assets/size.dart';
 import 'package:test_pt_kb_insurance/views/activity.dart';
+import 'package:test_pt_kb_insurance/views/activity/tab.dart';
 import 'package:test_pt_kb_insurance/views/attendance.dart';
 import 'package:test_pt_kb_insurance/widgets/card_menu.dart';
 import 'package:test_pt_kb_insurance/widgets/text_label.dart';
@@ -35,7 +36,7 @@ class HomePage extends StatelessWidget {
             CardMenu(
               text: "Activity",
               images: ImagesApp.activity,
-              navigate: ActivityPage(),
+              navigate: TabActivity(),
             ),
             CardMenu(
               text: "Attendance",
